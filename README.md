@@ -8,5 +8,5 @@ Analysis scripts of hidden layer activations were written mostly in MATLAB, and 
 
 Pre-print: add here. 
 
-Models and model activation data are available for download at Zenodo: link added here once Zenodo upload quota request has been approved.
+Models and model activation data are available for download at Zenodo: link added here once Zenodo upload quota request has been approved. (approx. 113 GB in total when uncompressed)
 
