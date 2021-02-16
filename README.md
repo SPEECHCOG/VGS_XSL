@@ -11,7 +11,7 @@ Pre-print: add here.
 Models and model activation data are available for download at Zenodo: link added here once Zenodo upload quota request has been approved. (approx. 113 GB in total when uncompressed)
 
 
-## Data
+## Data used in the experiments
 
 
 Datasets:
@@ -19,13 +19,13 @@ Datasets:
 Brent-Siskind corpus is available at  
 https://childes.talkbank.org/access/Eng-NA/Brent.html  
 
-Places audio captions (English) database is available at  
+Places audio captions (English) are available at  
 https://groups.csail.mit.edu/sls/downloads/placesaudio/downloads.cgi  
 
-SPEECH-COCO audio captions are available for download at  
+SPEECH-COCO audio captions are available at  
 https://zenodo.org/record/4282267#.YCuNc2PkuL4  
 
-MSCOCO images are available for download at  
+MSCOCO images are available at  
 https://cocodataset.org/#download  
 
 The derived version of "Large-Brent" with utterance-level waveforms with their  
@@ -33,4 +33,4 @@ The derived version of "Large-Brent" with utterance-level waveforms with their
  and Räsänen et al., 2018) is available from the first author upon request.  
  The data cannot be shared publicly as it would require redistribution of modified  
  Brent-Siskind audio files. Annotations corresponding to the derived model activations  
- are available from Zenodo as listed in "code and models"-section above.  
+are included in the model activation package shared through Zenodo (link above). 
