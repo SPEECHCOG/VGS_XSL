@@ -5,10 +5,9 @@ Python and MATLAB scripts for the experiments reported in manuscript titled "Can
 
 Analysis scripts of hidden layer activations were written mostly in MATLAB, and can be found under `selectivity_analyses/`
 
-
 Pre-print: add here. 
 
-Models and model activation data are available for download at Zenodo: link added here once Zenodo upload quota request has been approved. (approx. 113 GB in total when uncompressed)
+Models and model activation data are available for download at Zenodo: (`waiting for Zenodo quota approval`) (approx. 113 GB in total when uncompressed)
 
 
 ## Data used in the experiments
