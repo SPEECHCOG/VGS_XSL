@@ -22,7 +22,7 @@ Places audio captions (English) are available at
 https://groups.csail.mit.edu/sls/downloads/placesaudio/downloads.cgi  
 
 SPEECH-COCO audio captions are available at  
-https://zenodo.org/record/4282267#.YCuNc2PkuL4  
+https://zenodo.org/record/4282267
 
 MSCOCO images are available at  
 https://cocodataset.org/#download  
