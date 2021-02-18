@@ -21,6 +21,8 @@ https://childes.talkbank.org/access/Eng-NA/Brent.html
 Places audio captions (English) are available at  
 https://groups.csail.mit.edu/sls/downloads/placesaudio/downloads.cgi  
 
+Places205 images: http://places.csail.mit.edu/downloadData.html
+
 SPEECH-COCO audio captions are available at  
 https://zenodo.org/record/4282267
 
