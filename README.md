@@ -12,9 +12,6 @@ Models and model activation data are available for download at Zenodo: (`waiting
 
 ## Data used in the experiments
 
-
-Datasets:
-
 Brent-Siskind corpus is available at  
 https://childes.talkbank.org/access/Eng-NA/Brent.html  
 
