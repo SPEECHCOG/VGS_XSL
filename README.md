@@ -28,7 +28,7 @@ https://cocodataset.org/#download
 
 The derived version of "Large-Brent" with utterance-level waveforms with their  
  phone, syllable and word-level transcripts (based on Rytting et al., 2010,  
- and Räsänen et al., 2018) is available from the first author upon request.  
+ and Räsänen et al., 2018) is available from the second author upon request (okko.rasanen@tuni.fi).  
  The data cannot be shared publicly as it would require redistribution of modified  
  Brent-Siskind audio files. Annotations corresponding to the derived model activations  
 are included in the model activation package shared through Zenodo (link above). 
