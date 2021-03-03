@@ -3,11 +3,12 @@
 Python and MATLAB scripts for the experiments reported in manuscript titled "*Can phones, syllables, and words emerge as side-products of cross-situational audiovisual learning? --- A computational investigation*" by Khazar Khorrami and Okko Räsänen. 
 
 
-Analysis scripts of hidden layer activations were written mostly in MATLAB, and can be found under `selectivity_analyses/`
+Feature extraction, model training and semantic retrieval evalution scripts were written in Python and are available from the respective folders. 
+Analysis scripts of hidden layer activations were written mostly in MATLAB, and can be found under `selectivity_analyses/`  
 
-Pre-print: https://psyarxiv.com/37zna
+Models and model activation data are available for download at Zenodo: https://doi.org/10.5281/zenodo.4564283   
 
-Models and model activation data are available for download at Zenodo: https://doi.org/10.5281/zenodo.4564283 . 
+Manuscript pre-print is available at: https://psyarxiv.com/37zna  
 
 
 ## Data used in the experiments
