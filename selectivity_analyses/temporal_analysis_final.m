@@ -36,7 +36,7 @@ for corpiter = 1:2 % iterate across training corpora
         target_corpus = target_corpora{targiter};
         
         corpus = sprintf('%s-%s',training_corpus,target_corpus);
-                
+        
         fprintf('\n#######\nProcessing %s.\n#######\n',corpus);
         
         N_models = length(modelnames);
@@ -47,9 +47,9 @@ for corpiter = 1:2 % iterate across training corpora
             target_len = 512;
         end
         
-        methods = {'entropy','L2'};
+        methods = {'entropy','L2','linseg'};
         
-        for method_iter = 1:2
+        for method_iter = 1:3
             
             method = methods{method_iter};
             
@@ -172,88 +172,95 @@ for corpiter = 1:2 % iterate across training corpora
                         N = size(sample,1);
                         
                         vec{layer} = zeros(N,target_len); % Go through cases
-                        for k = 1:N
-                            % Get activation for signal k
-                            y = squeeze(sample(k,:,:));
-                            y = double(y);
+                        
+                        
+                        if(strcmp(method,'linseg'))
+                            vec{layer} = linear_boundary_regression(sample,onsets,ref,target_len);
+                        else
                             
-                            % Resample to target_len time frames if needed
-                            if(size(y,1) < target_len)
-                                rat = round(target_len/size(y,1));
-                                y = repelem(y,rat,1);
-                                if(size(y,1) > target_len)
-                                    y = y(1:target_len,:);
-                                end
-                            else
-                                rat = 0;
-                            end
-                            
-                            y_org = y;
-                            
-                            % Sum code
-                            if(strcmp(method,'L2'))
-                                y = sqrt(sum(y.^2,2));
+                            for k = 1:N
+                                % Get activation for signal k
+                                y = squeeze(sample(k,:,:));
+                                y = double(y);
                                 
-                                % Harwath's version with DoG filtering
-                                if(DoG_filter)
-                                    y_f = filter(filt,1,y);
-                                    y_f = circshift(y_f,-length(filt)/2);
-                                    y = y_f;
-                                elseif(usediff) % regular timediff
-                                    y = [diff(y);0];
-                                end
-                                % Fix scale of samples preceding utterance onset
-                                y(1:max(1,onsets(k))) = y(max(1,onsets(k))+1);
-                                y(end-2:end) = y(end-3);
-                                                                
-                                
-                            elseif(strcmp(method,'entropy'))
-                                y = y-min(y(:));                                
-                                y = y./repmat(nansum(y,2),1,size(y,2));
-                                y = -sum(y.*log2(y+0.00000001),2)./log2(size(y,2));
-                               
-                                if(DoG_filter)
-                                   y_f = filter(filt,1,y);
-                                   y_f = circshift(y_f,-length(filt)/2);
-                                   y = y_f;
-                                elseif(usediff)
-                                    y = [diff(y);0];
-                                end
-                                % Fix scale of samples preceding utterance onset
-                                y(1:max(1,onsets(k))) = y(max(1,onsets(k))+1);
-                                y(end-2:end) = y(end-3);
-                            else
-                                error('unknown measure');
-                            end
-                            
-                            if(rat > 0)
-                                fillen = (rat+mod(rat,2));
-                                y = filter(ones(fillen,1)./fillen,1,y);
-                                y = [y(round(fillen/2)+1:end,:);zeros(round(fillen/2),size(y,2))];
-                                y(y < 0) = 0;
-                            end
-                                                        
-                            
-                            % Z-score norming
-                            if(donorm)
-                                if(onsets(k) > 0)
-                                    y = y-nanmean(y(onsets(k):end)); 
-                                    y = y./nanstd(y(onsets(k):end));
+                                % Resample to target_len time frames if needed
+                                if(size(y,1) < target_len)
+                                    rat = round(target_len/size(y,1));
+                                    y = repelem(y,rat,1);
+                                    if(size(y,1) > target_len)
+                                        y = y(1:target_len,:);
+                                    end
                                 else
-                                    y = y-nanmean(y(1:end)); 
-                                    y = y./nanstd(y(1:end));
-                                    
+                                    rat = 0;
                                 end
+                                
+                                y_org = y;
+                                
+                                % Sum code
+                                if(strcmp(method,'L2'))
+                                    y = sqrt(sum(y.^2,2));
+                                    
+                                    % Harwath's version with DoG filtering
+                                    if(DoG_filter)
+                                        y_f = filter(filt,1,y);
+                                        y_f = circshift(y_f,-length(filt)/2);
+                                        y = y_f;
+                                    elseif(usediff) % regular timediff
+                                        y = [diff(y);0];
+                                    end
+                                    % Fix scale of samples preceding utterance onset
+                                    y(1:max(1,onsets(k))) = y(max(1,onsets(k))+1);
+                                    y(end-2:end) = y(end-3);
+                                    
+                                    
+                                elseif(strcmp(method,'entropy'))
+                                    y = y-min(y(:));
+                                    y = y./repmat(nansum(y,2),1,size(y,2));
+                                    y = -sum(y.*log2(y+0.00000001),2)./log2(size(y,2));
+                                    
+                                    if(DoG_filter)
+                                        y_f = filter(filt,1,y);
+                                        y_f = circshift(y_f,-length(filt)/2);
+                                        y = y_f;
+                                    elseif(usediff)
+                                        y = [diff(y);0];
+                                    end
+                                    % Fix scale of samples preceding utterance onset
+                                    y(1:max(1,onsets(k))) = y(max(1,onsets(k))+1);
+                                    y(end-2:end) = y(end-3);
+                                else
+                                    error('unknown measure');
+                                end
+                                
+                                if(rat > 0)
+                                    fillen = (rat+mod(rat,2));
+                                    y = filter(ones(fillen,1)./fillen,1,y);
+                                    y = [y(round(fillen/2)+1:end,:);zeros(round(fillen/2),size(y,2))];
+                                    y(y < 0) = 0;
+                                end
+                                
+                                
+                                % Z-score norming
+                                if(donorm)
+                                    if(onsets(k) > 0)
+                                        y = y-nanmean(y(onsets(k):end));
+                                        y = y./nanstd(y(onsets(k):end));
+                                    else
+                                        y = y-nanmean(y(1:end));
+                                        y = y./nanstd(y(1:end));
+                                        
+                                    end
+                                end
+                                
+                                % Anything before utterance onset is set to
+                                % zero.
+                                y(1:onsets(k)) = 0;
+                                
+                                vec{layer}(k,:) = y;
                             end
-                            
-                            % Anything before utterance onset is set to
-                            % zero.
-                            y(1:onsets(k)) = 0;
-
-                            vec{layer}(k,:) = y;        
                         end
                     end
-                                       
+                    
                     N_layers = length(vec);
                     
                     ff = {'phones','syllables','words'};
@@ -278,45 +285,51 @@ for corpiter = 1:2 % iterate across training corpora
                         fprintf('Processing layer %d...\n',layer);
                         for k = 1:N
                             
-                            y = vec{layer}(k,:);
-                                                      
-                            
-                            for thriter = 1:length(thrvals)
-                                thr = thrvals(thriter);
-                                [maxtab,mintab] = peakdet(y,thr);
+                            for unittype = 1:3
                                 
-                                % Use peaks or valleys?
-                                if(usepeaks)
-                                    if(~isempty(maxtab))
-                                        hypos = maxtab(:,1);
-                                    else
-                                        hypos = [];
-                                    end
-                                else
-                                    if(~isempty(mintab))
-                                        hypos = mintab(:,1);
-                                    else
-                                        hypos = [];
-                                    end
+                                try % this should work for Brent
+                                    t_ref = round([ref.(ff{unittype}).onset{k};ref.(ff{unittype}).offset{k}(end)])+onsets(k)-1;
+                                catch % this should work for COCO
+                                    t_ref = round([ref.(ff{unittype}).onset{k} ref.(ff{unittype}).offset{k}(end)])+onsets(k)-1;
+                                    t_ref = t_ref';
                                 end
-                                                                
+                                if(ref_center == 1)
+                                    t_ref = t_ref(1:end-1) + round(diff(t_ref).*0.5);
+                                end
                                 
-                                % Evaluate
+                                t_ref(t_ref < 1) = [];
                                 
-                                for unittype = 1:3
-                                    try % this should work for Brent
-                                        t_ref = round([ref.(ff{unittype}).onset{k};ref.(ff{unittype}).offset{k}(end)])+onsets(k)-1;
-                                    catch % row vector instead, this should work for COCO
-                                        t_ref = round([ref.(ff{unittype}).onset{k} ref.(ff{unittype}).offset{k}(end)])+onsets(k)-1;
-                                        t_ref = t_ref';
+                                %t_ref = t_ref+1;
+                                
+                                t_ref = unique(t_ref);
+                                
+                                if(strcmp(method,'linseg'))
+                                    y = vec{layer}(k,:,unittype); % get unit specific output from linseg
+                                else
+                                    y = vec{layer}(k,:); 
+                                end
+                                
+                                % Iterate through detection thresholds
+                                for thriter = 1:length(thrvals)
+                                    thr = thrvals(thriter);
+                                    
+                                    % peak picking to get boundaries
+                                    [maxtab,mintab] = peakdet(y,thr);
+                                    
+                                    if(usepeaks)
+                                        if(~isempty(maxtab))
+                                            hypos = maxtab(:,1);
+                                        else
+                                            hypos = [];
+                                        end
+                                    else
+                                        if(~isempty(mintab))
+                                            hypos = mintab(:,1);
+                                        else
+                                            hypos = [];
+                                        end
                                     end
                                     
-                                    % Remove negative reference boundaries
-                                    % (the few cases where original utterances
-                                    % were longer than the model input truncation
-                                    % length).
-                                    t_ref(t_ref < 1) = [];                                    
-                                    t_ref = unique(t_ref); 
                                     
                                     % Exclude hypotheses that are not during
                                     % the utterance
@@ -330,7 +343,7 @@ for corpiter = 1:2 % iterate across training corpora
                                     
                                     % Generate random segmentation for
                                     % baseline
-                                                                        
+                                    
                                     hypos_random = randi(max(t_ref)-min(t_ref),length(hypos),1)+min(t_ref);
                                     
                                     % Measure number of hits based on allowed distances
@@ -364,7 +377,7 @@ for corpiter = 1:2 % iterate across training corpora
                                                 hit_r(r) = 1;
                                                 d_r(:,b_r) = Inf;
                                             end
-                                        end                                      
+                                        end
                                     end
                                     
                                     N_hits(unittype,layer,thriter) = N_hits(unittype,layer,thriter)+sum(hit);
