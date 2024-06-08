@@ -16,6 +16,7 @@ Manuscript is available at: https://ldr.lps.library.cmu.edu/article/id/434/
 ![VGSnetworkarchitecture](https://github.com/SPEECHCOG/VGS_XSL/assets/33454475/3a12ddb7-1058-4bee-85aa-85fb7613eeb8)
 
 
+
 ## Data used in the experiments
 
 Brent-Siskind corpus is available at  
