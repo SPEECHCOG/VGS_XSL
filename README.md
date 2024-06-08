@@ -8,7 +8,7 @@ Analysis scripts of hidden layer activations were written mostly in MATLAB, and 
 
 Models and model activation data are available for download at Zenodo: https://doi.org/10.5281/zenodo.4564283   
 
-Manuscript pre-print is available at: https://psyarxiv.com/37zna  
+Manuscript is available at: https://ldr.lps.library.cmu.edu/article/id/434/
 
 
 ## Data used in the experiments
