@@ -11,6 +11,8 @@ Models and model activation data are available for download at Zenodo: https://d
 Manuscript is available at: https://ldr.lps.library.cmu.edu/article/id/434/
 
 
+# Model 
+
 ![VGSnetworkarchitecture](https://github.com/SPEECHCOG/VGS_XSL/assets/33454475/3a12ddb7-1058-4bee-85aa-85fb7613eeb8)
 
 
